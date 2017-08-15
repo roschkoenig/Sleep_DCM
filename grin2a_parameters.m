@@ -5,7 +5,7 @@
 spm('defaults', 'eeg') 
 fs          = filesep;
 
-if strcmp(computer, 'MACI64');
+if strcmp(computer, 'MACI64')
     Fbase = '/Users/roschkoenig/Dropbox/Research/Friston Lab/1602 GRIN2A Code';
 else 
     Fbase       = 'D:\Research_Data\1608 GRIN2A Micha MSc\Whole Scalp';
