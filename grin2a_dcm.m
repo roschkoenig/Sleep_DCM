@@ -2,7 +2,7 @@
 %==========================================================================
 % Housekeeping
 %--------------------------------------------------------------------------
-subject = 'JS';
+subject = 'HC';
 D       = grin2a_housekeeping(subject);
 fs      = filesep;
     
@@ -76,7 +76,7 @@ DCM.M.pC = pC;
 %--------------------------------------------------------------------------
 load(Dfile);
 D.path                          = Dfile;
-D.other.inv{end}.forward.vol    = '/Users/roschkoenig/Dropbox/Research/tools/spm/canonical/single_subj_T1_EEG_BEM.mat';
+D.other.inv{end}.forward.vol    = 'C:\Users\rrosch\Dropbox\Research\tools\spm\canonical\single_subj_T1_EEG_BEM.mat';
 save(Dfile, 'D');
 
 
