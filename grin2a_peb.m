@@ -1,102 +1,82 @@
 % Housekeeping
 %==========================================================================
-% File structures
+D       = grin2a_housekeeping('HC');
+fs      = filesep;
+    
+Fbase       = D.Fbase;
+Fscripts    = D.Fscripts;
+Fdata       = D.Fdata;
+Fmat        = [Fbase fs 'Matlab Files'];
+
+% Load subject specific DCM files
 %--------------------------------------------------------------------------
-spm('defaults', 'eeg') 
-fs          = filesep;
+PCM = load([Fmat fs 'JS']);   PCM = PCM.ACM;  % models * sleep stages
+HCM = load([Fmat fs 'HC']);   HCM = HCM.ACM;  % models * sleep stages
 
-if strcmp(computer, 'MACI64')
-    Fbase = '/Users/roschkoenig/Dropbox/Research/Friston Lab/1602 GRIN2A Code';
-else 
-    Fbase       = 'D:\Research_Data\1608 GRIN2A Micha MSc\Whole Scalp';
-end
+%%
+ACM = {HCM{2,:}, PCM{2,:}};
 
-clear files
-count = 0;
-subs = {'HC', 'JS'};
+X       = ones(length(ACM), 1);
+M.X     = X;
 
-for s = 1:length(subs) 
-    subject = subs{s};
-    Fscripts    = [Fbase fs 'Scripts'];
-    Fdata       = [Fbase fs 'Data'];
-    Fanalysis   = [Fbase fs 'Matlab Files' fs subject];
-    Fmeeg       = [Fanalysis fs 'MEEG'];
-    Fdcm        = [Fanalysis fs 'DCM'];
-    Fsplit      = [Fdata fs 'Split'];
-    addpath(Fscripts);
+[PEB RCM]   = spm_dcm_peb(ACM', M);
 
-    if subject == 'JS', fn = 'PT'; 
-    else fn = subject; end
-
-    thesefiles = cellstr(spm_select('FPList', Fdcm, '^DCM'));
-    for t = 1:length(thesefiles)
-        count = count + 1;
-        files{count} = thesefiles{t};
-    end
-end
-
-for f = 1:length(files)
-    clear DCM
-    load(files{f});
-    ACM{f} = DCM;
-end
-
-%% Restructure DCM to allow PEB to run
-%==========================================================================
-
-for i = 1:length(ACM)
-% Create empty structure arrays
-%--------------------------------------------------------------------------
-pE = ACM{i}.M.pE;
-pC = ACM{i}.M.pC;
-Ep = ACM{i}.Ep;
-Cp = spm_unvec(diag(ACM{i}.Cp), ACM{i}.Ep);
-
-TCM{i}.M.pE.T = [];     TCM{i}.M.pC.T = [];
-TCM{i}.M.pE.G = [];     TCM{i}.M.pC.G = [];
-TCM{i}.M.pE.H = [];     TCM{i}.M.pC.H = [];
-
-TCM{i}.Ep.T = [];       TCM{i}.Cp.T = [];
-TCM{i}.Ep.G = [];       TCM{i}.Cp.G = [];
-TCM{i}.Ep.H = [];       TCM{i}.Cp.H = [];
-
-pE = ACM{i}.M.pE;
-pC = ACM{i}.M.pC;
-Ep = ACM{i}.Ep;
-Cp = spm_unvec(diag(ACM{i}.Cp), ACM{i}.Ep);
-
-ti = 0;
-gi = 0;
-for n = 1:5 
-for t = 1:length(pE.int{n}.T);
-    ti = ti + 1;
-    TCM{i}.M.pE.T(ti)    = pE.int{n}.T(t);
-    TCM{i}.M.pC.T(ti)    = pC.int{n}.T(t);
-    TCM{i}.Ep.T(ti)      = Ep.int{n}.T(t);
-    TCM{i}.Cp.T(ti)      = Cp.int{n}.T(t);
-end
-for g = 1:length(pE.int{n}.G);
-    gi = gi + 1;
-    TCM{i}.M.pE.G(gi)    = pE.int{n}.G(g);
-    TCM{i}.M.pC.G(gi)    = pC.int{n}.G(g);
-    TCM{i}.Ep.G(gi)      = Ep.int{n}.G(g);
-    TCM{i}.Cp.G(gi)      = Cp.int{n}.G(g);
-end
-end
-
-TCM{i}.M.pE.A = pE.A;
-TCM{i}.M.pC.A = pC.A;
-TCM{i}.Ep.A   = Ep.A;
-TCM{i}.Cp.A   = Cp.A;
-
-TCM{i}.M.pE.H = pE.int{end}.H;
-TCM{i}.M.pC.H = pC.int{end}.H;
-TCM{i}.Ep.H   = Ep.int{end}.H;
-TCM{i}.Cp.H   = Cp.int{end}.H;
-
-TCM{i}.F    = ACM{i}.F;
-TCM{i}.Cp   = diag(spm_vec(TCM{i}.Cp));
-end
+% %% Restructure DCM to allow PEB to run
+% %==========================================================================
+% 
+% for i = 1:length(ACM)
+% % Create empty structure arrays
+% %--------------------------------------------------------------------------
+% pE = ACM{i}.M.pE;
+% pC = ACM{i}.M.pC;
+% Ep = ACM{i}.Ep;
+% Cp = spm_unvec(diag(ACM{i}.Cp), ACM{i}.Ep);
+% 
+% TCM{i}.M.pE.T = [];     TCM{i}.M.pC.T = [];
+% TCM{i}.M.pE.G = [];     TCM{i}.M.pC.G = [];
+% TCM{i}.M.pE.H = [];     TCM{i}.M.pC.H = [];
+% 
+% TCM{i}.Ep.T = [];       TCM{i}.Cp.T = [];
+% TCM{i}.Ep.G = [];       TCM{i}.Cp.G = [];
+% TCM{i}.Ep.H = [];       TCM{i}.Cp.H = [];
+% 
+% pE = ACM{i}.M.pE;
+% pC = ACM{i}.M.pC;
+% Ep = ACM{i}.Ep;
+% Cp = spm_unvec(diag(ACM{i}.Cp), ACM{i}.Ep);
+% 
+% ti = 0;
+% gi = 0;
+% for n = 1:5 
+% for t = 1:length(pE.int{n}.T);
+%     ti = ti + 1;
+%     TCM{i}.M.pE.T(ti)    = pE.int{n}.T(t);
+%     TCM{i}.M.pC.T(ti)    = pC.int{n}.T(t);
+%     TCM{i}.Ep.T(ti)      = Ep.int{n}.T(t);
+%     TCM{i}.Cp.T(ti)      = Cp.int{n}.T(t);
+% end
+% for g = 1:length(pE.int{n}.G);
+%     gi = gi + 1;
+%     TCM{i}.M.pE.G(gi)    = pE.int{n}.G(g);
+%     TCM{i}.M.pC.G(gi)    = pC.int{n}.G(g);
+%     TCM{i}.Ep.G(gi)      = Ep.int{n}.G(g);
+%     TCM{i}.Cp.G(gi)      = Cp.int{n}.G(g);
+% end
+% end
+% 
+% TCM{i}.M.pE.A = pE.A;
+% TCM{i}.M.pC.A = pC.A;
+% TCM{i}.Ep.A   = Ep.A;
+% TCM{i}.Cp.A   = Cp.A;
+% 
+% TCM{i}.M.pE.H = pE.int{end}.H;
+% TCM{i}.M.pC.H = pC.int{end}.H;
+% TCM{i}.Ep.H   = Ep.int{end}.H;
+% TCM{i}.Cp.H   = Cp.int{end}.H;
+% 
+% TCM{i}.F    = ACM{i}.F;
+% TCM{i}.Cp   = diag(spm_vec(TCM{i}.Cp));
+% end
 
 %% Run PEB on restructured DCMs
 %==========================================================================

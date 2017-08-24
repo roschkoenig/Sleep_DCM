@@ -3,7 +3,7 @@ fs  = filesep;
 if strcmp(computer, 'MACI64')
     Fbase = '/Users/roschkoenig/Dropbox/Research/Friston Lab/1602 GRIN2A Code';
 else 
-    Fbase       = 'D:\Research_Data\1608 GRIN2A Micha MSc\Whole Scalp';
+    Fbase       = 'C:\Users\rrosch\Dropbox\Research\Friston Lab\1602 GRIN2A Code';
 end
 
 Fscripts    = [Fbase fs 'Scripts'];
@@ -27,6 +27,7 @@ spm('defaults', 'eeg');
 
 % Pack for exporting
 %==========================================================================
+D.Fbase         = Fbase;
 D.Fscripts      = Fscripts;
 D.Fdata         = Fdata;
 D.Fanalysis     = Fanalysis;

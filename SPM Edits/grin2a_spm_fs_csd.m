@@ -16,7 +16,7 @@ function [y] = grin2a_spm_fs_csd(y,M)
 % control the relative precision of (second-order) data features
 %--------------------------------------------------------------------------
 % ORIGINAL: beta = [1 1/8 8];                                                           
-beta = [1 1/8 1/4];                                                         %% grin2a Edit: reduce weighting of MAR parameters
+beta = [1 1/8 1];                                                         %% grin2a Edit: reduce weighting of MAR parameters
 
 % return (scaled) cross-spectra, covariance functions MAR coefficients
 %--------------------------------------------------------------------------
