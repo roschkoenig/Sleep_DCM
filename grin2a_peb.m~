@@ -30,23 +30,6 @@ M.X     = X;
 Np = length(PEB.Pnames);
 Nm = length(PEB.Xnames);
 
-Alist = find(~cellfun(@isempty, strfind(PEB.Pnames, 'A')));
-Thal  = find(~cellfun(@isempty, strfind(PEB.Pnames(Alist), '(5')));
-
-% Cortico-cortical connectivity
-
-% Thalamocortical connectivity
-
-% Intrinsic cortical connectivity
-
-% Intrinsic thalamic connectivity
-
-% Time constants
-
-
-
-
-%%
 models = zeros(Nm,Np);
 
 

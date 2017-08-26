@@ -144,8 +144,8 @@ switch i
         % cortical
         F(3,1) = 1; F(4,2) = 1; 
         % thalamic
-        F(1,5) = 1; F(2,5) = 1;     % parietal thalamus
-        F(3,6) = 1; F(4,6) = 1;     % frontal thalamus
+        F(1,5) = 1; F(2,6) = 1;     % left thalamus
+        F(3,5) = 1; F(4,6) = 1;     % right thamalus
 
         B      = zeros(Nareas, Nareas);
         % cortical
